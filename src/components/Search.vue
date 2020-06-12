@@ -22,6 +22,9 @@ export default {
   height: 50px
   background: url(./../assets/searchBtn.png)center center/cover
   border: none
+  &:hover
+    cursor: pointer
+    transform: scale(1.05)
 .search-input
   height: 50px
   background-color: transparent

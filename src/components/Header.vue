@@ -44,22 +44,8 @@ export default {
   height: auto
   width: 150px
   margin: 0 auto 0 50px
-.btn-main
-  height: 50px
-  background: linear-gradient(to bottom, rgb(110, 109, 109), rgb(238, 235, 235) 50%, rgb(105, 105, 105))
-  font-weight: bold
-  color: rgb(87, 85, 85)
-  font-size: 20px
-  :hover
-    cursor: pointer
 .btn-modal
   width: 200px
 .btn-basket
   width: 150px
-
-
-
-
-
-
 </style>
