@@ -13,7 +13,10 @@ export default {
   props: ["products"],
   components: {
     Product
-  }
+  },
+  data: () => ({
+    
+  })
 }
 </script>
 
