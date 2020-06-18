@@ -2,7 +2,8 @@
   <div class="products">
     <Product  v-for="item of products"
       :key="item.id"
-      :product="item"/>
+      :product="item"
+      />
   </div>
 </template>
 
@@ -15,8 +16,8 @@ export default {
     Product
   },
   data: () => ({
-    
-  })
+    basketItems: []
+  }),
 }
 </script>
 

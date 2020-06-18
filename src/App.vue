@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <div class="container">
-      <Header/>
-    <main>
-        <Products :products="products" @add-product="addProduct"/>
-        <Basket :basketItems="basketItems"/>
-    </main>
+      <Header :basketVisibility="basketVisibility" @toogle-vb="toogleVB"/>
+      <main>
+          <Products :products="products"  @add-product="addProduct"/>
+          <Basket :basketItems="basketItems" @remove="remove" :visibility-basket="basketVisibility"/>
+      </main>
     </div>
   </div>
 </template>
@@ -24,13 +24,17 @@ export default {
   data: () => ({
     API: "http://my-json-server.typicode.com/Selestina84/ShopMaketVue",
     products: [],
-    basketItems: []
+    basketItems: [],
+    basketVisibility: false
   }),
   methods: {
     _getJson(url){
       return fetch(url)
         .then(result => result.json())
         .catch(error => console.log(error));
+    },
+    toogleVB(){
+      this.basketVisibility=!this.basketVisibility
     },
     addProduct(item){
       let find = this.basketItems.find(el => el.id === item.id);
@@ -41,7 +45,14 @@ export default {
         this.basketItems.push(prod);
       }
       console.log(this.basketItems);
-    }
+    },
+    remove(item){
+      if(item.count>1){
+          item.count--;
+      } else {
+          this.basketItems.splice(this.basketItems.indexOf(item), 1);
+      }
+    },
   },
   mounted(){
     this._getJson(`${this.API}/products`)
@@ -59,6 +70,12 @@ export default {
   width: 95%
   margin: 0 auto
   background-color: rgb(204, 201, 201)
+main
+  height: 100vh
+  padding: 0 5%
+  display: flex
+  justify-content: space-evenly
+  align-items: flex-start
 .btn-main
   height: 50px
   background: linear-gradient(to bottom, rgb(110, 109, 109), rgb(238, 235, 235) 50%, rgb(105, 105, 105))

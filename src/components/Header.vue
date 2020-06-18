@@ -8,7 +8,7 @@
     <div class="rigth-wrapper">
       <button class="btn-main btn-modal">Связаться с нами</button>
       <Search/>
-      <button class="btn-main btn-basket">Корзина</button>
+      <button class="btn-main btn-basket" @click="toogleBasketVisible">Корзина</button>
     </div>
   </header>
 </template>
@@ -17,8 +17,14 @@
 import Search from "@/components/Search";
 export default {
   name: 'Header',
+  props: ["basketVisible"],
   components: {
     Search
+  },
+  methods: {
+    toogleBasketVisible(visible){
+      this.$emit('toogle-vb',visible)
+    }
   }
 
 }

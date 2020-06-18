@@ -16,7 +16,7 @@ export default {
   props: ["product"],
   methods: {
     addProduct(product){
-      this.$parent.$emit("addProduct", product);
+      this.$parent.$emit("add-product", product);
     }
   }
 }
