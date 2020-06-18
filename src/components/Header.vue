@@ -6,9 +6,9 @@
       </a>
     </div>
     <div class="rigth-wrapper">
-      <button class="btn-main btn-modal">Связаться с нами</button>
+      <button class="btn-main btn-modal" @click="toggleModalVisibility">Связаться с нами</button>
       <Search/>
-      <button class="btn-main btn-basket" @click="toogleBasketVisible">Корзина</button>
+      <button class="btn-main btn-basket" @click="toggleBasketVisibility">Корзина</button>
     </div>
   </header>
 </template>
@@ -17,13 +17,16 @@
 import Search from "@/components/Search";
 export default {
   name: 'Header',
-  props: ["basketVisible"],
+  props: ["basketVisibility", "modalVisibility"],
   components: {
     Search
   },
   methods: {
-    toogleBasketVisible(visible){
-      this.$emit('toogle-vb',visible)
+    toggleBasketVisibility(visibility){
+      this.$emit('toggle-vb',visibility)
+    },
+    toggleModalVisibility(visibility){
+      this.$emit('toggle-modal',visibility)
     }
   }
 

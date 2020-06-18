@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div class="container">
-      <Header :basketVisibility="basketVisibility" @toogle-vb="toogleVB"/>
+      <Modal :visibility-modal="modalVisibility" @toggle-modal="toggleModal"/>
+      <Header :basketVisibility="basketVisibility" @toggle-vb="toggleVB" :modalVisibility="modalVisibility" @toggle-modal="toggleModal"/>
       <main>
           <Products :products="products"  @add-product="addProduct"/>
           <Basket :basketItems="basketItems" @remove="remove" :visibility-basket="basketVisibility"/>
@@ -14,18 +15,21 @@
 import Header from "@/components/Header";
 import Products from "@/components/Products";
 import Basket from "@/components/Basket";
+import Modal from "@/components/Modal";
 export default {
   name: "App",
   components: {
     Header,
     Products,
-    Basket
+    Basket,
+    Modal
   },
   data: () => ({
     API: "http://my-json-server.typicode.com/Selestina84/ShopMaketVue",
     products: [],
     basketItems: [],
-    basketVisibility: false
+    basketVisibility: false,
+    modalVisibility: false
   }),
   methods: {
     _getJson(url){
@@ -33,8 +37,11 @@ export default {
         .then(result => result.json())
         .catch(error => console.log(error));
     },
-    toogleVB(){
+    toggleVB(){
       this.basketVisibility=!this.basketVisibility
+    },
+    toggleModal(){
+      this.modalVisibility=!this.modalVisibility
     },
     addProduct(item){
       let find = this.basketItems.find(el => el.id === item.id);
