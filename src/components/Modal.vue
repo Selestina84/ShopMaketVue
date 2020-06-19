@@ -1,47 +1,116 @@
 <template>
-   <div class="feedback-modal" v-if="visibilityModal">
-      <div class="feedback-modal-container">
-          <h2 class="feedback-title">Мы свяжемся с Вами в ближайшее время</h2>
-          <button class="delete-btn modal-close-btn" @click="toggleMD">x</button>
-          <form action="#" class="feedback-form">
-            <input required placeholder="Ваше имя" name="name" type="text" class="feedback-input">
-            <span class="validation ">Имя должно содержать только буквы</span>
-            <input required placeholder="Ваш номер телефона" name="phone" type="phone" class="feedback-input">
-            <span class="validation ">Телефон должен быть в формате +7(000)000-00-00</span>
-            <input required placeholder="Ваш e-mail" name="email" type="e-mail" class="feedback-input">
-            <span class="validation">E-mail должен быть в формате mymail@mail.ru, или my.mail@mail.ru, или my-mail@mail.ru</span>
-            <textarea placeholder="Ваше сообщение" name="message" id="message" cols="30" rows="5" class="feedback-text"></textarea>
-            <button class="btn-feedback disabled" disabled>Связаться со мной</button>
+  <div class="feedback-modal" v-if="visibilityModal">
+    <div class="feedback-modal-container">
+      <h2 class="feedback-title">Мы свяжемся с Вами в ближайшее время</h2>
+        <button class="delete-btn modal-close-btn" @click="toggleMD">x</button>
+          <form action="#" class="feedback-form" @submit.prevent="sendData">
+            <input placeholder="Ваше имя" name="name" type="text" class="feedback-input" v-model.trim="$v.name.$model">
+            <span v-if="$v.name.$error" class="error">
+              <template v-if="!$v.name.minLength">
+                  В имени должно быть не меньше {{$v.name.$params.minLength.min}} букв.
+              </template>
+              <template v-else-if="!$v.name.alpha">
+                  Имя должно содержать только буквы
+              </template>
+              <template v-else>
+                  Поле обязательно для заполнения
+              </template>
+            </span>
+            <input placeholder="Ваш номер телефона в формате +7(000)000-00-00" name="phone" type="phone" class="feedback-input" v-model.trim="$v.phone.$model">
+            <span v-if="$v.phone.$error" class="error">
+              <template v-if="!$v.phone.numeric">
+                  Телефон должен быть в формате +7(000)000-00-00
+              </template>
+              <template v-else>
+                  Поле обязательно для заполнения
+              </template>
+            </span>
+            <input required placeholder="Ваш e-mail" name="email" type="e-mail" class="feedback-input" v-model.trim="$v.email.$model">
+            <span v-if="$v.email.$error" class="error">
+              <template v-if="!$v.email.email">
+                  Введите действующий e-mail
+              </template>
+              <template v-else>
+                  Поле обязательно для заполнения
+              </template>
+            </span>
+            <textarea placeholder="Ваше сообщение" name="message" id="message" cols="30" rows="5" class="feedback-text" v-model="message"></textarea>
+            <button class="btn-feedback" :disabled="$v.$invalid">Связаться со мной</button>
           </form>
       </div>
-    </div>
+  </div>
 </template>
 
 <script>
+import { required, minLength, email} from 'vuelidate/lib/validators';
 export default {
   name: "Modal",
-  props: ["visibilityModal"],
+  props: ["visibilityModal","API"],
+  data:() => ({
+    id: Math.round(Math.random()*1e9),
+    name: '',
+    phone: '',
+    email: '',
+    message: '',
+    user: {}
+  }),
+  validations: {
+    name: {
+      required,
+      minLength: minLength(2),
+      alpha: val => /^[а-яёa-z]*$/i.test(val),
+
+    },
+    phone: {
+      required,
+      validFormat: val => /^\+7+\(+\d{3}\)+\d{3}-\d{2}-\d{2}$/.test(val),
+    },
+    email: {
+      required,
+      email
+    }
+  },
   methods: {
     toggleMD(visibility){
       this.$emit('toggle-modal', visibility)
+    },
+
+    createUser(){
+      this.user.id = this.id,
+      this.user.name= this.name,
+      this.user.phone= this.phone,
+      this.user.email= this.email,
+      this.user.message=this.message
+      return this.user
+      },
+    sendData(){
+      fetch(`${this.API}/users`, {
+            method: "POST",
+            body: JSON.stringify(this.createUser()),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(json => console.log(json));
+      }
     }
   }
-
-}
 </script>
 
 <style lang="sass">
 .feedback-modal
   width: 100%
-  height: 100vh
+  height: 100%
   position: absolute
   z-index: 1
   background-color: rgba(0, 0, 0, 0.5)
   display: flex
   justify-content: center
   align-items:center
+
 .feedback-modal-container
-  width: 500px
+  width: 600px
   height: 400px
   background-color: rgb(204, 201, 201)
   padding: 20px
@@ -87,16 +156,10 @@ export default {
   color: rgb(61, 60, 60)
   font-size: 18px
 
-.validation
-  display: none
-  margin: 0 0 10px 0
-  text-align: center
-  font-size: 15px
-  color: red
-
-.disabled
+.btn-feedback[disabled]
   opacity: 0.5
 
-.invalid
-  outline: 1px solid red
+.error
+  margin: 0 0 10px 0
+  color: red
 </style>

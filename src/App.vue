@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="container">
-      <Modal :visibility-modal="modalVisibility" @toggle-modal="toggleModal"/>
+      <Modal :visibility-modal="modalVisibility" @toggle-modal="toggleModal" :API="API"/>
       <Header :basketVisibility="basketVisibility" @toggle-vb="toggleVB" :modalVisibility="modalVisibility" @toggle-modal="toggleModal"/>
       <main>
           <Products :products="products"  @add-product="addProduct"/>
@@ -74,6 +74,7 @@ export default {
 #app
   font-family: Arial, Helvetica, sans-serif
 .container
+  position: relative
   width: 95%
   margin: 0 auto
   background-color: rgb(204, 201, 201)
