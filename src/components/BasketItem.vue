@@ -23,7 +23,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .basket-product
   border-bottom: 1px dashed rgb(87, 85, 85)
   padding: 10px

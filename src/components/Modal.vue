@@ -1,42 +1,41 @@
 <template>
-  <div class="feedback-modal" v-if="visibilityModal">
+  <div class="feedback-modal" v-if="visibilityModal" @click.self="toggleMD">
     <div class="feedback-modal-container">
-      <h2 class="feedback-title">Мы свяжемся с Вами в ближайшее время</h2>
         <button class="delete-btn modal-close-btn" @click="toggleMD">x</button>
-          <form action="#" class="feedback-form" @submit.prevent="sendData">
-            <input placeholder="Ваше имя" name="name" type="text" class="feedback-input" v-model.trim="$v.name.$model">
-            <span v-if="$v.name.$error" class="error">
-              <template v-if="!$v.name.minLength">
-                  В имени должно быть не меньше {{$v.name.$params.minLength.min}} букв.
-              </template>
-              <template v-else-if="!$v.name.alpha">
-                  Имя должно содержать только буквы
-              </template>
-              <template v-else>
-                  Поле обязательно для заполнения
-              </template>
-            </span>
-            <input placeholder="Ваш номер телефона в формате +7(000)000-00-00" name="phone" type="phone" class="feedback-input" v-model.trim="$v.phone.$model">
-            <span v-if="$v.phone.$error" class="error">
-              <template v-if="!$v.phone.numeric">
-                  Телефон должен быть в формате +7(000)000-00-00
-              </template>
-              <template v-else>
-                  Поле обязательно для заполнения
-              </template>
-            </span>
-            <input required placeholder="Ваш e-mail" name="email" type="e-mail" class="feedback-input" v-model.trim="$v.email.$model">
-            <span v-if="$v.email.$error" class="error">
-              <template v-if="!$v.email.email">
-                  Введите действующий e-mail
-              </template>
-              <template v-else>
-                  Поле обязательно для заполнения
-              </template>
-            </span>
-            <textarea placeholder="Ваше сообщение" name="message" id="message" cols="30" rows="5" class="feedback-text" v-model="message"></textarea>
-            <button class="btn-feedback" :disabled="$v.$invalid">Связаться со мной</button>
-          </form>
+      <form action="#" class="feedback-form" @submit.prevent="sendData($event)">
+        <input placeholder="Ваше имя" name="name" type="text" class="feedback-input" :class="{ 'input-error': $v.name.$error }" v-model.trim="$v.name.$model">
+        <span v-if="$v.name.$error" class="error">
+          <template v-if="!$v.name.minLength">
+              В имени должно быть не меньше {{$v.name.$params.minLength.min}} букв.
+          </template>
+          <template v-else-if="!$v.name.alpha">
+              Имя должно содержать только буквы
+          </template>
+          <template v-else>
+              Поле обязательно для заполнения
+          </template>
+        </span>
+        <input placeholder="Ваш номер телефона в формате +7(000)000-00-00" name="phone" type="phone" class="feedback-input" :class="{ 'input-error': $v.phone.$error }" v-model.trim="$v.phone.$model">
+        <span v-if="$v.phone.$error" class="error">
+          <template v-if="!$v.phone.numeric">
+              Телефон должен быть в формате +7(000)000-00-00
+          </template>
+          <template v-else>
+              Поле обязательно для заполнения
+          </template>
+        </span>
+        <input required placeholder="Ваш e-mail" name="email" type="e-mail" class="feedback-input" :class="{ 'input-error': $v.email.$error }" v-model.trim="$v.email.$model">
+        <span v-if="$v.email.$error" class="error">
+          <template v-if="!$v.email.email">
+              Введите действующий e-mail
+          </template>
+          <template v-else>
+              Поле обязательно для заполнения
+          </template>
+        </span>
+        <textarea placeholder="Ваше сообщение" name="message" id="message" cols="30" rows="5" class="feedback-text" v-model="message"></textarea>
+        <button class="btn-main btn-feedback" :disabled="$v.$invalid">Связаться со мной</button>
+      </form>
       </div>
   </div>
 </template>
@@ -75,14 +74,17 @@ export default {
       this.$emit('toggle-modal', visibility)
     },
 
-    createUser(){
+    createUser(event){
       this.user.id = this.id,
       this.user.name= this.name,
       this.user.phone= this.phone,
       this.user.email= this.email,
       this.user.message=this.message
+      event.target.reset()
       return this.user
       },
+
+
     sendData(){
       fetch(`${this.API}/users`, {
             method: "POST",
@@ -98,20 +100,24 @@ export default {
   }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .feedback-modal
   width: 100%
-  height: 100%
+  height: 100vh
   position: absolute
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1
   background-color: rgba(0, 0, 0, 0.5)
-  display: flex
-  justify-content: center
-  align-items:center
 
 .feedback-modal-container
   width: 600px
-  height: 400px
+  height: auto
   background-color: rgb(204, 201, 201)
   padding: 20px
 
@@ -151,15 +157,27 @@ export default {
   width: 60%
   height: 40px
   margin: 0 auto 20px
-  background:  linear-gradient(to bottom, rgb(110, 109, 109), rgb(238, 235, 235) 50%, rgb(105, 105, 105))
-  font-weight: bold
-  color: rgb(61, 60, 60)
-  font-size: 18px
+
+.modal-close-btn
+  margin: 0 10px 20px auto
+  display: block
+  background-color: red
+  width: 30px
+  height: 30px
 
 .btn-feedback[disabled]
   opacity: 0.5
+input
+  &:focus
+    outline: none
 
 .error
   margin: 0 0 10px 0
   color: red
+
+.input-error
+  outline: 1px solid red
+  border: none
+  &:focus
+    outline: 1px solid red
 </style>

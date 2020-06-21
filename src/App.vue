@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{'overflow-hidden': this.modalVisibility}">
     <div class="container">
       <Modal :visibility-modal="modalVisibility" @toggle-modal="toggleModal" :API="API"/>
       <Header :basketVisibility="basketVisibility" @toggle-vb="toggleVB" :modalVisibility="modalVisibility" @toggle-modal="toggleModal"/>
@@ -73,9 +73,11 @@ export default {
 <style lang="sass">
 #app
   font-family: Arial, Helvetica, sans-serif
+  height: 100%
 .container
   position: relative
   width: 95%
+  height: 100%
   margin: 0 auto
   background-color: rgb(204, 201, 201)
 main
