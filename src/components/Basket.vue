@@ -9,7 +9,9 @@
         :key="item.id"
         :basketItem="item">
       </BasketItem>
-      <div class = "basket-price">Итого: {{allCost}} </div>
+      <div class = "basket-price">Итого:
+        <span>{{allCost}} $ </span>
+      </div>
       <button class="btn-main basket-btn">Оформить заказ</button>
     </template>
   </div>
@@ -44,6 +46,14 @@ export default {
   font-weight: bold
   font-size: 20px
   text-align: center
+.basket-price
+  font-size: 18px
+  text-align: end
+  margin: 10px 0
+  color: rgb(49, 49, 49)
+  span
+    font-weight: bold
+
 
 
 </style>

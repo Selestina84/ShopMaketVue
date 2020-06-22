@@ -2,7 +2,7 @@
   <div id="app" :class="{'overflow-hidden': this.modalVisibility}">
     <div class="container">
       <Modal :visibility-modal="modalVisibility" @toggle-modal="toggleModal" :API="API"/>
-      <Header :basketVisibility="basketVisibility" @toggle-vb="toggleVB" :modalVisibility="modalVisibility" @toggle-modal="toggleModal"/>
+      <Header :basketVisibility="basketVisibility" @toggle-vb="toggleVB" :modalVisibility="modalVisibility" @toggle-modal="toggleModal" @search-text="searchText"/>
       <main>
           <Products :products="products"  @add-product="addProduct"/>
           <Basket :basketItems="basketItems" @remove="remove" :visibility-basket="basketVisibility"/>
@@ -29,7 +29,8 @@ export default {
     products: [],
     basketItems: [],
     basketVisibility: false,
-    modalVisibility: false
+    modalVisibility: false,
+    search: ''
   }),
   methods: {
     _getJson(url){
@@ -42,6 +43,9 @@ export default {
     },
     toggleModal(){
       this.modalVisibility=!this.modalVisibility
+    },
+    searchText(value){
+      console.log(value)
     },
     addProduct(item){
       let find = this.basketItems.find(el => el.id === item.id);
@@ -73,7 +77,10 @@ export default {
 <style lang="sass">
 #app
   font-family: Arial, Helvetica, sans-serif
-  height: 100%
+  height: 100vh
+body
+  padding: 0
+  margin: 0
 .container
   position: relative
   width: 95%
@@ -97,4 +104,6 @@ main
     transform: scale(1.05)
   &:focus
     outline: none
+.overflow-hidden
+  overflow: hidden
 </style>

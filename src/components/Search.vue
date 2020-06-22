@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <form action="#" class="search-form">
-        <input type="text" class="search-input">
+        <input type="text" class="search-input" v-model="search" @input="$parent.$emit('searchText', search)">
         <button type="submit" class="btn-search"></button>
     </form>
   </div>
@@ -9,7 +9,10 @@
 
 <script>
 export default {
-  name: 'Search'
+  name: "Search",
+  data: () => ({
+    search: '',
+  })
 }
 </script>
 

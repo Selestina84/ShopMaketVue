@@ -1,42 +1,60 @@
 <template>
   <div class="feedback-modal" v-if="visibilityModal" @click.self="toggleMD">
     <div class="feedback-modal-container">
-        <button class="delete-btn modal-close-btn" @click="toggleMD">x</button>
-      <form action="#" class="feedback-form" @submit.prevent="sendData($event)">
-        <input placeholder="Ваше имя" name="name" type="text" class="feedback-input" :class="{ 'input-error': $v.name.$error }" v-model.trim="$v.name.$model">
-        <span v-if="$v.name.$error" class="error">
-          <template v-if="!$v.name.minLength">
-              В имени должно быть не меньше {{$v.name.$params.minLength.min}} букв.
-          </template>
-          <template v-else-if="!$v.name.alpha">
-              Имя должно содержать только буквы
-          </template>
-          <template v-else>
-              Поле обязательно для заполнения
-          </template>
-        </span>
-        <input placeholder="Ваш номер телефона в формате +7(000)000-00-00" name="phone" type="phone" class="feedback-input" :class="{ 'input-error': $v.phone.$error }" v-model.trim="$v.phone.$model">
-        <span v-if="$v.phone.$error" class="error">
-          <template v-if="!$v.phone.numeric">
-              Телефон должен быть в формате +7(000)000-00-00
-          </template>
-          <template v-else>
-              Поле обязательно для заполнения
-          </template>
-        </span>
-        <input required placeholder="Ваш e-mail" name="email" type="e-mail" class="feedback-input" :class="{ 'input-error': $v.email.$error }" v-model.trim="$v.email.$model">
-        <span v-if="$v.email.$error" class="error">
-          <template v-if="!$v.email.email">
-              Введите действующий e-mail
-          </template>
-          <template v-else>
-              Поле обязательно для заполнения
-          </template>
-        </span>
-        <textarea placeholder="Ваше сообщение" name="message" id="message" cols="30" rows="5" class="feedback-text" v-model="message"></textarea>
-        <button class="btn-main btn-feedback" :disabled="$v.$invalid">Связаться со мной</button>
-      </form>
-      </div>
+      <template v-if ="showPreloader">
+        <div class="preloader">
+          <svg class="preloader__image" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+           <path fill="currentColor"
+            d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z">
+           </path>
+         </svg>
+        </div>
+      </template>
+      <template v-if="thanksVisibility">
+        <div class="thank-wrapper">
+          <span class="thank-title">
+            Спасибо! Мы свяжемся с вами в ближайшее время!
+          </span>
+        </div>
+      </template>
+      <template v-else>
+        <button class="delete-btn modal-close-btn" @click="toggleMD">&#215;</button>
+        <form action="#" class="feedback-form" @submit.prevent="sendData($event)">
+          <input placeholder="Ваше имя" name="name" type="text" class="feedback-input" :class="{ 'input-error': $v.name.$error }" v-model.trim="$v.name.$model">
+          <span v-if="$v.name.$error" class="error">
+            <template v-if="!$v.name.minLength">
+                В имени должно быть не меньше {{$v.name.$params.minLength.min}} букв.
+            </template>
+            <template v-else-if="!$v.name.alpha">
+                Имя должно содержать только буквы
+            </template>
+            <template v-else>
+                Поле обязательно для заполнения
+            </template>
+          </span>
+          <input placeholder="Ваш номер телефона в формате +7(000)000-00-00" name="phone" type="phone" class="feedback-input" :class="{ 'input-error': $v.phone.$error }" v-model.trim="$v.phone.$model">
+          <span v-if="$v.phone.$error" class="error">
+            <template v-if="!$v.phone.valid">
+                Телефон должен быть в формате +7(000)000-00-00
+            </template>
+            <template v-else>
+                Поле обязательно для заполнения
+            </template>
+          </span>
+          <input required placeholder="Ваш e-mail" name="email" type="e-mail" class="feedback-input" :class="{ 'input-error': $v.email.$error }" v-model.trim="$v.email.$model">
+          <span v-if="$v.email.$error" class="error">
+            <template v-if="!$v.email.email">
+                Введите действующий e-mail
+            </template>
+            <template v-else>
+                Поле обязательно для заполнения
+            </template>
+          </span>
+          <textarea placeholder="Ваше сообщение" name="message" id="message" cols="30" rows="5" class="feedback-text" v-model="message"></textarea>
+          <button class="btn-main btn-feedback" :disabled="$v.$invalid">Связаться со мной</button>
+        </form>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -51,6 +69,8 @@ export default {
     phone: '',
     email: '',
     message: '',
+    showPreloader: false,
+    thanksVisibility: false,
     user: {}
   }),
   validations: {
@@ -70,22 +90,31 @@ export default {
     }
   },
   methods: {
+    newForm(){
+      this.modalState = Object.assign({}, this.modalDefaultState);
+      return this.modalState
+    },
     toggleMD(visibility){
       this.$emit('toggle-modal', visibility)
     },
 
-    createUser(event){
+    createUser(){
       this.user.id = this.id,
       this.user.name= this.name,
       this.user.phone= this.phone,
       this.user.email= this.email,
       this.user.message=this.message
-      event.target.reset()
       return this.user
-      },
-
-
-    sendData(){
+    },
+    showThank(){
+      this.thanksVisibility = true;
+      setTimeout(() => {
+        this.toggleMD(this.visibilityModal)
+        this.thanksVisibility = false;
+        }, 2000);
+    },
+    sendData(event){
+      this.showPreloader = true,
       fetch(`${this.API}/users`, {
             method: "POST",
             body: JSON.stringify(this.createUser()),
@@ -94,9 +123,15 @@ export default {
             }
         })
         .then(response => response.json())
-        .then(json => console.log(json));
-      }
+        .then(json =>{
+        event.target.reset()
+        console.log(json)})
+        .finally(() => {
+        this.showPreloader = false
+        this.showThank()
+        });
     }
+  }
   }
 </script>
 
@@ -116,6 +151,8 @@ export default {
   background-color: rgba(0, 0, 0, 0.5)
 
 .feedback-modal-container
+  background: linear-gradient(to bottom, rgb(110, 109, 109), rgb(238, 235, 235) 50%, rgb(105, 105, 105))
+  position: relative
   width: 600px
   height: auto
   background-color: rgb(204, 201, 201)
@@ -164,15 +201,19 @@ export default {
   background-color: red
   width: 30px
   height: 30px
+  font
 
 .btn-feedback[disabled]
   opacity: 0.5
+  &:hover
+    cursor: default
+    transform: none
 input
   &:focus
     outline: none
 
 .error
-  margin: 0 0 10px 0
+  padding: 0 0 5px 0
   color: red
 
 .input-error
@@ -180,4 +221,38 @@ input
   border: none
   &:focus
     outline: 1px solid red
+
+.preloader
+  position: absolute
+  left: 0
+  top: 0
+  right: 0
+  bottom: 0
+  overflow: hidden
+  background: #e0e0e0;
+  z-index: 1;
+
+.preloader__image
+  position: relative
+  top: 50%
+  left: 50%
+  width: 70px
+  height: 70px
+  margin-top: -35px
+  margin-left: -35px
+  text-align: center
+  animation: preloader-rotate 2s infinite linear
+
+@keyframes preloader-rotate
+  100%
+    transform: rotate(360deg)
+
+.thank-wrapper
+  padding: 10px
+  display: flex
+  justify-content: center
+  align-items: center
+  font-weight: bold
+  color: rgb(87, 85, 85)
+  font-size: 22px
 </style>
