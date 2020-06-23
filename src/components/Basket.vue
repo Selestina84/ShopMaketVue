@@ -12,7 +12,7 @@
       <div class = "basket-price">Итого:
         <span>{{allCost}} $ </span>
       </div>
-      <button class="btn-main basket-btn">Оформить заказ</button>
+      <button class="btn-main basket-btn" @click="$emit('make-order', allCost)">Оформить заказ</button>
     </template>
   </div>
 </template>

@@ -1,11 +1,11 @@
 <template>
-  <div id="app" :class="{'overflow-hidden': this.modalVisibility}">
+  <div id="app" :class="{'overflow-hidden': (this.modalVisibility || this.modalThankVisibility)}">
     <div class="container">
       <Modal :visibility-modal="modalVisibility" @toggle-modal="toggleModal" :API="API"/>
       <Header :basketVisibility="basketVisibility" @toggle-vb="toggleVB" :modalVisibility="modalVisibility" @toggle-modal="toggleModal" @search-text="searchText"/>
       <main>
-          <Products :products="products"  @add-product="addProduct"/>
-          <Basket :basketItems="basketItems" @remove="remove" :visibility-basket="basketVisibility"/>
+          <Products :products="filtered"  @add-product="addProduct"/>
+          <Basket :basketItems="basketItems" @remove="remove" @make-order="makeOrder" :visibility-basket="basketVisibility"/>
       </main>
     </div>
   </div>
@@ -27,9 +27,11 @@ export default {
   data: () => ({
     API: "http://my-json-server.typicode.com/Selestina84/ShopMaketVue",
     products: [],
+    filtered: [],
     basketItems: [],
     basketVisibility: false,
     modalVisibility: false,
+    modalThankVisibility: false,
     search: ''
   }),
   methods: {
@@ -45,7 +47,8 @@ export default {
       this.modalVisibility=!this.modalVisibility
     },
     searchText(value){
-      console.log(value)
+      let regexp = new RegExp(value, 'i');
+      this.filtered = this.products.filter(el => regexp.test(el.title));
     },
     addProduct(item){
       let find = this.basketItems.find(el => el.id === item.id);
@@ -55,7 +58,6 @@ export default {
         const prod = Object.assign({ count: 1 }, item);
         this.basketItems.push(prod);
       }
-      console.log(this.basketItems);
     },
     remove(item){
       if(item.count>1){
@@ -64,11 +66,32 @@ export default {
           this.basketItems.splice(this.basketItems.indexOf(item), 1);
       }
     },
+    createOrder(value){
+      return Object.assign({},this.basketItems,{finallyPrice: value})
+    },
+    makeOrder(allPrice){
+      fetch(`${this.API}/basket`, {
+            method: "POST",
+            body: JSON.stringify(this.createOrder(allPrice)),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(json =>{
+        console.log(json)})
+        .catch(error => console.log(error))
+        .finally(()=>{
+          this.basketItems=[],
+          this.basketVisibility=false
+        })
+    }
   },
   mounted(){
     this._getJson(`${this.API}/products`)
     .then(data => {
       this.products = [...data];
+      this.filtered =[... data]
     })
   }
 };

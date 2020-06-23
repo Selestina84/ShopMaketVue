@@ -1,8 +1,8 @@
 <template>
   <div class="search">
     <form action="#" class="search-form">
-        <input type="text" class="search-input" v-model="search" @input="$parent.$emit('searchText', search)">
-        <button type="submit" class="btn-search"></button>
+        <input type="text" class="search-input" v-model.trim="search" @input ="$parent.$emit('search-text', search)">
+        <button type="submit" class="btn-search" @click="$parent.$emit('search-text', search)"></button>
     </form>
   </div>
 </template>
@@ -13,6 +13,7 @@ export default {
   data: () => ({
     search: '',
   })
+
 }
 </script>
 
@@ -28,6 +29,8 @@ export default {
   &:hover
     cursor: pointer
     transform: scale(1.05)
+  &:focus
+    outline: none
 .search-input
   height: 50px
   background-color: transparent

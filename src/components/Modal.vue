@@ -2,13 +2,7 @@
   <div class="feedback-modal" v-if="visibilityModal" @click.self="toggleMD">
     <div class="feedback-modal-container">
       <template v-if ="showPreloader">
-        <div class="preloader">
-          <svg class="preloader__image" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-           <path fill="currentColor"
-            d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z">
-           </path>
-         </svg>
-        </div>
+        <Preloader/>
       </template>
       <template v-if="thanksVisibility">
         <div class="thank-wrapper">
@@ -59,10 +53,14 @@
 </template>
 
 <script>
+import Preloader from "@/components/Preloader";
 import { required, minLength, email} from 'vuelidate/lib/validators';
 export default {
   name: "Modal",
   props: ["visibilityModal","API"],
+  components: {
+    Preloader
+  },
   data:() => ({
     id: Math.round(Math.random()*1e9),
     name: '',
@@ -111,7 +109,7 @@ export default {
       setTimeout(() => {
         this.toggleMD(this.visibilityModal)
         this.thanksVisibility = false;
-        }, 2000);
+        }, 1500);
     },
     sendData(event){
       this.showPreloader = true,
@@ -126,6 +124,7 @@ export default {
         .then(json =>{
         event.target.reset()
         console.log(json)})
+        .catch(error => console.log(error))
         .finally(() => {
         this.showPreloader = false
         this.showThank()
@@ -221,31 +220,6 @@ input
   border: none
   &:focus
     outline: 1px solid red
-
-.preloader
-  position: absolute
-  left: 0
-  top: 0
-  right: 0
-  bottom: 0
-  overflow: hidden
-  background: #e0e0e0;
-  z-index: 1;
-
-.preloader__image
-  position: relative
-  top: 50%
-  left: 50%
-  width: 70px
-  height: 70px
-  margin-top: -35px
-  margin-left: -35px
-  text-align: center
-  animation: preloader-rotate 2s infinite linear
-
-@keyframes preloader-rotate
-  100%
-    transform: rotate(360deg)
 
 .thank-wrapper
   padding: 10px
