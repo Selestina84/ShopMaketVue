@@ -1,11 +1,31 @@
 <template>
-  <div id="app" :class="{'overflow-hidden': (this.modalVisibility || this.modalThankVisibility)}">
+  <div
+    id="app"
+    :class="{
+      'overflow-hidden': this.modalVisibility || this.modalThankVisibility
+    }"
+  >
     <div class="container">
-      <Modal :visibility-modal="modalVisibility" @toggle-modal="toggleModal" :API="API"/>
-      <Header :basketVisibility="basketVisibility" @toggle-vb="toggleVB" :modalVisibility="modalVisibility" @toggle-modal="toggleModal" @search-text="searchText"/>
+      <Modal
+        :visibility-modal="modalVisibility"
+        @toggle-modal="toggleModal"
+        :API="API"
+      />
+      <Header
+        :basketVisibility="basketVisibility"
+        @toggle-vb="toggleVB"
+        :modalVisibility="modalVisibility"
+        @toggle-modal="toggleModal"
+        @search-text="searchText"
+      />
       <main>
-          <Products :products="filtered"  @add-product="addProduct"/>
-          <Basket :basketItems="basketItems" @remove="remove" @make-order="makeOrder" :visibility-basket="basketVisibility"/>
+        <Products :products="filtered" @add-product="addProduct" />
+        <Basket
+          :basketItems="basketItems"
+          @remove="remove"
+          @make-order="makeOrder"
+          :visibility-basket="basketVisibility"
+        />
       </main>
     </div>
   </div>
@@ -32,25 +52,25 @@ export default {
     basketVisibility: false,
     modalVisibility: false,
     modalThankVisibility: false,
-    search: ''
+    search: ""
   }),
   methods: {
-    _getJson(url){
+    _getJson(url) {
       return fetch(url)
         .then(result => result.json())
         .catch(error => console.log(error));
     },
-    toggleVB(){
-      this.basketVisibility=!this.basketVisibility
+    toggleVB() {
+      this.basketVisibility = !this.basketVisibility;
     },
-    toggleModal(){
-      this.modalVisibility=!this.modalVisibility
+    toggleModal() {
+      this.modalVisibility = !this.modalVisibility;
     },
-    searchText(value){
-      let regexp = new RegExp(value, 'i');
+    searchText(value) {
+      let regexp = new RegExp(value, "i");
       this.filtered = this.products.filter(el => regexp.test(el.title));
     },
-    addProduct(item){
+    addProduct(item) {
       let find = this.basketItems.find(el => el.id === item.id);
       if (find) {
         find.count++;
@@ -59,40 +79,39 @@ export default {
         this.basketItems.push(prod);
       }
     },
-    remove(item){
-      if(item.count>1){
-          item.count--;
+    remove(item) {
+      if (item.count > 1) {
+        item.count--;
       } else {
-          this.basketItems.splice(this.basketItems.indexOf(item), 1);
+        this.basketItems.splice(this.basketItems.indexOf(item), 1);
       }
     },
-    createOrder(value){
-      return Object.assign({},this.basketItems,{finallyPrice: value})
+    createOrder(value) {
+      return Object.assign({}, this.basketItems, { finallyPrice: value });
     },
-    makeOrder(allPrice){
+    makeOrder(allPrice) {
       fetch(`${this.API}/basket`, {
-            method: "POST",
-            body: JSON.stringify(this.createOrder(allPrice)),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
+        method: "POST",
+        body: JSON.stringify(this.createOrder(allPrice)),
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
         .then(response => response.json())
-        .then(json =>{
-        console.log(json)})
-        .catch(error => console.log(error))
-        .finally(()=>{
-          this.basketItems=[],
-          this.basketVisibility=false
+        .then(json => {
+          console.log(json);
         })
+        .catch(error => console.log(error))
+        .finally(() => {
+          (this.basketItems = []), (this.basketVisibility = false);
+        });
     }
   },
-  mounted(){
-    this._getJson(`${this.API}/products`)
-    .then(data => {
+  mounted() {
+    this._getJson(`${this.API}/products`).then(data => {
       this.products = [...data];
-      this.filtered =[... data]
-    })
+      this.filtered = [...data];
+    });
   }
 };
 </script>

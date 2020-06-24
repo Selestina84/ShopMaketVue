@@ -1,8 +1,8 @@
 <template>
   <div class="feedback-modal" v-if="visibilityModal" @click.self="toggleMD">
     <div class="feedback-modal-container">
-      <template v-if ="showPreloader">
-        <Preloader/>
+      <template v-if="showPreloader">
+        <Preloader />
       </template>
       <template v-if="thanksVisibility">
         <div class="thank-wrapper">
@@ -12,40 +12,79 @@
         </div>
       </template>
       <template v-else>
-        <button class="delete-btn modal-close-btn" @click="toggleMD">&#215;</button>
-        <form action="#" class="feedback-form" @submit.prevent="sendData($event)">
-          <input placeholder="Ваше имя" name="name" type="text" class="feedback-input" :class="{ 'input-error': $v.name.$error }" v-model.trim="$v.name.$model">
+        <button class="delete-btn modal-close-btn" @click="toggleMD">
+          &#215;
+        </button>
+        <form
+          action="#"
+          class="feedback-form"
+          @submit.prevent="sendData($event)"
+        >
+          <input
+            placeholder="Ваше имя"
+            name="name"
+            type="text"
+            class="feedback-input"
+            :class="{ 'input-error': $v.name.$error }"
+            v-model.trim="$v.name.$model"
+          />
           <span v-if="$v.name.$error" class="error">
             <template v-if="!$v.name.minLength">
-                В имени должно быть не меньше {{$v.name.$params.minLength.min}} букв.
+              В имени должно быть не меньше
+              {{ $v.name.$params.minLength.min }} букв.
             </template>
             <template v-else-if="!$v.name.alpha">
-                Имя должно содержать только буквы
+              Имя должно содержать только буквы
             </template>
             <template v-else>
-                Поле обязательно для заполнения
+              Поле обязательно для заполнения
             </template>
           </span>
-          <input placeholder="Ваш номер телефона в формате +7(000)000-00-00" name="phone" type="phone" class="feedback-input" :class="{ 'input-error': $v.phone.$error }" v-model.trim="$v.phone.$model">
+          <input
+            placeholder="Ваш номер телефона в формате +7(000)000-00-00"
+            name="phone"
+            type="phone"
+            class="feedback-input"
+            :class="{ 'input-error': $v.phone.$error }"
+            v-model.trim="$v.phone.$model"
+          />
           <span v-if="$v.phone.$error" class="error">
             <template v-if="!$v.phone.valid">
-                Телефон должен быть в формате +7(000)000-00-00
+              Телефон должен быть в формате +7(000)000-00-00
             </template>
             <template v-else>
-                Поле обязательно для заполнения
+              Поле обязательно для заполнения
             </template>
           </span>
-          <input required placeholder="Ваш e-mail" name="email" type="e-mail" class="feedback-input" :class="{ 'input-error': $v.email.$error }" v-model.trim="$v.email.$model">
+          <input
+            required
+            placeholder="Ваш e-mail"
+            name="email"
+            type="e-mail"
+            class="feedback-input"
+            :class="{ 'input-error': $v.email.$error }"
+            v-model.trim="$v.email.$model"
+          />
           <span v-if="$v.email.$error" class="error">
             <template v-if="!$v.email.email">
-                Введите действующий e-mail
+              Введите действующий e-mail
             </template>
             <template v-else>
-                Поле обязательно для заполнения
+              Поле обязательно для заполнения
             </template>
           </span>
-          <textarea placeholder="Ваше сообщение" name="message" id="message" cols="30" rows="5" class="feedback-text" v-model="message"></textarea>
-          <button class="btn-main btn-feedback" :disabled="$v.$invalid">Связаться со мной</button>
+          <textarea
+            placeholder="Ваше сообщение"
+            name="message"
+            id="message"
+            cols="30"
+            rows="5"
+            class="feedback-text"
+            v-model="message"
+          ></textarea>
+          <button class="btn-main btn-feedback" :disabled="$v.$invalid">
+            Связаться со мной
+          </button>
         </form>
       </template>
     </div>
@@ -54,19 +93,19 @@
 
 <script>
 import Preloader from "@/components/Preloader";
-import { required, minLength, email} from 'vuelidate/lib/validators';
+import { required, minLength, email } from "vuelidate/lib/validators";
 export default {
   name: "Modal",
-  props: ["visibilityModal","API"],
+  props: ["visibilityModal", "API"],
   components: {
     Preloader
   },
-  data:() => ({
-    id: Math.round(Math.random()*1e9),
-    name: '',
-    phone: '',
-    email: '',
-    message: '',
+  data: () => ({
+    id: Math.round(Math.random() * 1e9),
+    name: "",
+    phone: "",
+    email: "",
+    message: "",
     showPreloader: false,
     thanksVisibility: false,
     user: {}
@@ -75,12 +114,11 @@ export default {
     name: {
       required,
       minLength: minLength(2),
-      alpha: val => /^[а-яёa-z]*$/i.test(val),
-
+      alpha: val => /^[а-яёa-z]*$/i.test(val)
     },
     phone: {
       required,
-      validFormat: val => /^\+7+\(+\d{3}\)+\d{3}-\d{2}-\d{2}$/.test(val),
+      validFormat: val => /^\+7+\(+\d{3}\)+\d{3}-\d{2}-\d{2}$/.test(val)
     },
     email: {
       required,
@@ -88,50 +126,51 @@ export default {
     }
   },
   methods: {
-    newForm(){
+    newForm() {
       this.modalState = Object.assign({}, this.modalDefaultState);
-      return this.modalState
+      return this.modalState;
     },
-    toggleMD(visibility){
-      this.$emit('toggle-modal', visibility)
+    toggleMD(visibility) {
+      this.$emit("toggle-modal", visibility);
     },
 
-    createUser(){
-      this.user.id = this.id,
-      this.user.name= this.name,
-      this.user.phone= this.phone,
-      this.user.email= this.email,
-      this.user.message=this.message
-      return this.user
+    createUser() {
+      (this.user.id = this.id),
+        (this.user.name = this.name),
+        (this.user.phone = this.phone),
+        (this.user.email = this.email),
+        (this.user.message = this.message);
+      return this.user;
     },
-    showThank(){
+    showThank() {
       this.thanksVisibility = true;
       setTimeout(() => {
-        this.toggleMD(this.visibilityModal)
+        this.toggleMD(this.visibilityModal);
         this.thanksVisibility = false;
-        }, 1500);
+      }, 1500);
     },
-    sendData(event){
-      this.showPreloader = true,
-      fetch(`${this.API}/users`, {
-            method: "POST",
-            body: JSON.stringify(this.createUser()),
-            headers: {
-                'Content-type': 'application/json'
-            }
+    sendData(event) {
+      (this.showPreloader = true),
+        fetch(`${this.API}/users`, {
+          method: "POST",
+          body: JSON.stringify(this.createUser()),
+          headers: {
+            "Content-type": "application/json"
+          }
         })
-        .then(response => response.json())
-        .then(json =>{
-        event.target.reset()
-        console.log(json)})
-        .catch(error => console.log(error))
-        .finally(() => {
-        this.showPreloader = false
-        this.showThank()
-        });
+          .then(response => response.json())
+          .then(json => {
+            event.target.reset();
+            console.log(json);
+          })
+          .catch(error => console.log(error))
+          .finally(() => {
+            this.showPreloader = false;
+            this.showThank();
+          });
     }
   }
-  }
+};
 </script>
 
 <style lang="sass" scoped>

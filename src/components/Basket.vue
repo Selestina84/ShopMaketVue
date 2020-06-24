@@ -4,15 +4,15 @@
       <div class="empty">Ваша корзина пуста</div>
     </template>
     <template v-else>
-      <BasketItem
-        v-for="item of basketItems"
-        :key="item.id"
-        :basketItem="item">
+      <BasketItem v-for="item of basketItems" :key="item.id" :basketItem="item">
       </BasketItem>
-      <div class = "basket-price">Итого:
-        <span>{{allCost}} $ </span>
+      <div class="basket-price">
+        Итого:
+        <span>{{ allCost }} $ </span>
       </div>
-      <button class="btn-main basket-btn" @click="$emit('make-order', allCost)">Оформить заказ</button>
+      <button class="btn-main basket-btn" @click="$emit('make-order', allCost)">
+        Оформить заказ
+      </button>
     </template>
   </div>
 </template>
@@ -21,17 +21,19 @@
 import BasketItem from "@/components/BasketItem";
 export default {
   name: "Basket",
-  props: ["basketItems","visibilityBasket"],
+  props: ["basketItems", "visibilityBasket"],
   components: {
     BasketItem
   },
   computed: {
-      allCost(){
-        return this.basketItems.reduce((acc, elem) =>
-            acc+=(elem.count*elem.price),0);
-    },
+    allCost() {
+      return this.basketItems.reduce(
+        (acc, elem) => (acc += elem.count * elem.price),
+        0
+      );
+    }
   }
-}
+};
 </script>
 
 <style lang="sass" scoped>
@@ -53,7 +55,4 @@ export default {
   color: rgb(49, 49, 49)
   span
     font-weight: bold
-
-
-
 </style>

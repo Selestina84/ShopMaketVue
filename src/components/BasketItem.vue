@@ -3,14 +3,20 @@
     <div class="basket-product">
       <div class="left-block">
         <p class="basket-product-title">{{ basketItem.title }}</p>
-        <img class="basket-img" src="./../assets/img-default-basket.jpg" alt="Some img">
+        <img
+          class="basket-img"
+          src="./../assets/img-default-basket.jpg"
+          alt="Some img"
+        />
         <p class="product-count">Кол-во: {{ basketItem.count }}</p>
         <p class="product-single-price">Цена {{ basketItem.price }} $</p>
       </div>
       <div class="right-block">
-        <button class="delete-btn" @click="$parent.$emit('remove', basketItem)">&times;</button>
+        <button class="delete-btn" @click="$parent.$emit('remove', basketItem)">
+          &times;
+        </button>
         <p>Общая цена:</p>
-        <p class="product-price">{{basketItem.count*basketItem.price}} $</p>
+        <p class="product-price">{{ basketItem.count * basketItem.price }} $</p>
       </div>
     </div>
   </div>
@@ -20,7 +26,7 @@
 export default {
   name: "BasketItem",
   props: ["basketItem"]
-}
+};
 </script>
 
 <style lang="sass" scoped>

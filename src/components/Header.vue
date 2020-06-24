@@ -2,13 +2,17 @@
   <header class="header">
     <div class="left-wrapper">
       <a href="#" class="header-link">
-        <img src="./../assets/logo.png" alt="logo" class="header-logo">
+        <img src="./../assets/logo.png" alt="logo" class="header-logo" />
       </a>
     </div>
     <div class="rigth-wrapper">
-      <button class="btn-main btn-modal" @click="toggleModalVisibility">Связаться с нами</button>
-      <Search/>
-      <button class="btn-main btn-basket" @click="toggleBasketVisibility">Корзина</button>
+      <button class="btn-main btn-modal" @click="toggleModalVisibility">
+        Связаться с нами
+      </button>
+      <Search />
+      <button class="btn-main btn-basket" @click="toggleBasketVisibility">
+        Корзина
+      </button>
     </div>
   </header>
 </template>
@@ -16,21 +20,20 @@
 <script>
 import Search from "@/components/Search";
 export default {
-  name: 'Header',
+  name: "Header",
   props: ["basketVisibility", "modalVisibility"],
   components: {
     Search
   },
   methods: {
-    toggleBasketVisibility(visibility){
-      this.$emit('toggle-vb',visibility)
+    toggleBasketVisibility(visibility) {
+      this.$emit("toggle-vb", visibility);
     },
-    toggleModalVisibility(visibility){
-      this.$emit('toggle-modal',visibility)
+    toggleModalVisibility(visibility) {
+      this.$emit("toggle-modal", visibility);
     }
   }
-
-}
+};
 </script>
 
 <style scoped lang="sass">
