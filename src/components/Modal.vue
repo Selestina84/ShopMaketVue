@@ -7,7 +7,7 @@
       <template v-if="thanksVisibility">
         <div class="thank-wrapper">
           <span class="thank-title">
-            Спасибо! Мы свяжемся с вами в ближайшее время!
+            Thank! We will contact you shortly!
           </span>
         </div>
       </template>
@@ -21,7 +21,7 @@
           @submit.prevent="sendData($event)"
         >
           <input
-            placeholder="Ваше имя"
+            placeholder="Name"
             name="name"
             type="text"
             class="feedback-input"
@@ -30,18 +30,18 @@
           />
           <span v-if="$v.name.$error" class="error">
             <template v-if="!$v.name.minLength">
-              В имени должно быть не меньше
-              {{ $v.name.$params.minLength.min }} букв.
+              The name must be no less
+              {{ $v.name.$params.minLength.min }} letters.
             </template>
             <template v-else-if="!$v.name.alpha">
-              Имя должно содержать только буквы
+              Name must contain only letters
             </template>
             <template v-else>
-              Поле обязательно для заполнения
+              Required field
             </template>
           </span>
           <input
-            placeholder="Ваш номер телефона в формате +7(000)000-00-00"
+            placeholder="Phone in format +7(000)000-00-00"
             name="phone"
             type="phone"
             class="feedback-input"
@@ -50,15 +50,15 @@
           />
           <span v-if="$v.phone.$error" class="error">
             <template v-if="!$v.phone.valid">
-              Телефон должен быть в формате +7(000)000-00-00
+              Phone must be in format +7(000)000-00-00
             </template>
             <template v-else>
-              Поле обязательно для заполнения
+              Required field
             </template>
           </span>
           <input
             required
-            placeholder="Ваш e-mail"
+            placeholder="E-mail"
             name="email"
             type="e-mail"
             class="feedback-input"
@@ -67,14 +67,14 @@
           />
           <span v-if="$v.email.$error" class="error">
             <template v-if="!$v.email.email">
-              Введите действующий e-mail
+              Enter valid e-mail
             </template>
             <template v-else>
-              Поле обязательно для заполнения
+              Required field
             </template>
           </span>
           <textarea
-            placeholder="Ваше сообщение"
+            placeholder="Your message"
             name="message"
             id="message"
             cols="30"
@@ -83,7 +83,7 @@
             v-model="message"
           ></textarea>
           <button class="btn-main btn-feedback" :disabled="$v.$invalid">
-            Связаться со мной
+            Contact with me
           </button>
         </form>
       </template>

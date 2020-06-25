@@ -45,7 +45,7 @@ export default {
     Modal
   },
   data: () => ({
-    API: "http://my-json-server.typicode.com/Selestina84/ShopMaketVue",
+    API: "https://my-json-server.typicode.com/Selestina84/ShopMaketVue",
     products: [],
     filtered: [],
     basketItems: [],
@@ -90,7 +90,7 @@ export default {
       return Object.assign({}, this.basketItems, { finallyPrice: value });
     },
     makeOrder(allPrice) {
-      fetch(`${this.API}/basket`, {
+      fetch(`${this.baseURL}/basket`, {
         method: "POST",
         body: JSON.stringify(this.createOrder(allPrice)),
         headers: {
@@ -108,6 +108,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.API)
     this._getJson(`${this.API}/products`).then(data => {
       this.products = [...data];
       this.filtered = [...data];
