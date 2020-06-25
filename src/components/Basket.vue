@@ -1,17 +1,17 @@
 <template>
   <div class="basket" v-show="visibilityBasket">
     <template v-if="basketItems.length == 0">
-      <div class="empty">Ваша корзина пуста</div>
+      <div class="empty">Your basket is empty</div>
     </template>
     <template v-else>
       <BasketItem v-for="item of basketItems" :key="item.id" :basketItem="item">
       </BasketItem>
       <div class="basket-price">
-        Итого:
+        Total:
         <span>{{ allCost }} $ </span>
       </div>
       <button class="btn-main basket-btn" @click="$emit('make-order', allCost)">
-        Оформить заказ
+        Make an order
       </button>
     </template>
   </div>

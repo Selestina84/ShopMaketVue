@@ -4,11 +4,11 @@
     <img
       class="product-img"
       :alt="product.title"
-      src="./../assets/img-default.jpg"
+      src="@/assets/img-default.jpg"
     />
-    <p class="product-price">Цена: {{ product.price }} $</p>
+    <p class="product-price">Price: {{ product.price }} $</p>
     <button class=" btn-main product-btn" @click="addProduct(product)">
-      Купить
+      Buy
     </button>
   </div>
 </template>

@@ -2,16 +2,16 @@
   <header class="header">
     <div class="left-wrapper">
       <a href="#" class="header-link">
-        <img src="./../assets/logo.png" alt="logo" class="header-logo" />
+        <img src="@/assets/logo.png" alt="logo" class="header-logo" />
       </a>
     </div>
     <div class="rigth-wrapper">
       <button class="btn-main btn-modal" @click="toggleModalVisibility">
-        Связаться с нами
+        To contact us
       </button>
       <Search />
       <button class="btn-main btn-basket" @click="toggleBasketVisibility">
-        Корзина
+        Basket
       </button>
     </div>
   </header>
